@@ -1,0 +1,1 @@
+This is a simple project to improve my JavaScript skills coded during a boring class.

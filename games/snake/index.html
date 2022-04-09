@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        #deathScreen,
+        #startScreen {
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            position: absolute;
+            left: 0;
+            top: 0;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        p,
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #startScreen h1 {
+            color: green;
+        }
+
+        #deathScreen h1 {
+            color: darkred;
+        }
+
+        #score {
+            display: none;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+
+        #mainPage {
+            display: inline-block;
+            position: relative;
+            margin: 20px;
+            border-width: 2px;
+            border-color: gray;
+            border-style: solid;
+            box-sizing: content-box;
+            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        #game {
+            border-radius: 2px;
+        }
+
+        .button {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: #47ba66;
+            border-radius: 4px;
+            border-width: 1px;
+            border-color: #379150;
+            border-style: solid;
+            text-align: center;
+            line-height: 50px;
+            color: white;
+            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
+            margin: 0;
+            transition: all 0.1s linear;
+        }
+
+        .button:hover {
+            background-color: #3fa15b;
+        }
+
+        .button svg {
+            filter: drop-shadow(0px 2px 10px rgb(0, 0, 0, 0.1));
+        }
+
+        #info p,
+        #info h1 {
+            text-align: left;
+        }
+
+        #controls-aligner {
+            display: flex;
+            padding-top: 20px;
+        }
+
+        #controls {
+            margin: auto;
+            display: inline-block;
+            width: 175px;
+            height: 175px;
+            position: relative;
+        }
+
+        #button-left {
+            position: absolute;
+            top: 60px;
+            left: 0px;
+        }
+
+        #button-up {
+            position: absolute;
+            top: 0px;
+            left: 60px;
+        }
+
+        #button-down {
+            position: absolute;
+            top: 120px;
+            left: 60px;
+        }
+
+        #button-right {
+            position: absolute;
+            top: 60px;
+            left: 120px;
+        }
+
+        .button:active {
+            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
+        }
+        #author {
+            padding-top: 20px;
+            font-size: small;
+            text-align: left;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/3f9ce49f95.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="mainPage">
+        <p id="score">Score: 0</p>
+        <canvas id="game">
+        </canvas>
+        <div id="deathScreen">
+            <h1>You died!</h1>
+            <p id="deathScore">You scored: 0</p>
+            <p>Press <strong>Enter</strong> (or click here) enter to start over!</p>
+        </div>
+        <div id="startScreen">
+            <h1>Snake</h1>
+            <p>Press <strong>Enter</strong> (or click here) to start!</p>
+        </div>
+        <div id="controls-aligner">
+            <div id="controls">
+                <div class="button" id="button-left" onclick="moveLeft()"><i class="fa-solid fa-angle-left"></i></div>
+                <div class="button" id="button-up" onclick="moveUp()"><i class="fa-solid fa-angle-up"></i></div>
+                <div class="button" id="button-down" onclick="moveDown()"><i class="fa-solid fa-angle-down"></i></div>
+                <div class="button" id="button-right" onclick="moveRight()"><i class="fa-solid fa-angle-right"></i>
+                </div>
+            </div>
+        </div>
+        <div id="info">
+            <h1>Controls</h1>
+            <p>
+                You can use arrows on your keyboard or click the buttons bellow.
+                On mobile devices you can swap right, left, up or down to move the snake accordingly.
+            </p>
+            <h1>Kontroller</h1>
+            <p>
+                Klavye üzerinde yön oklarını veya yukarıdaki butonları kullanabilirsin.
+                Mobil cihazlarda sağa, sola, yukarı veya aşağı kaydırarak yılanı hareket ettirebilirsin.
+            </p>
+        </div>
+        <p id="author">Made by irrl, <a href="https://github.com/irrld/snake.js">click here</a> for the sources.</p>
+        <script src="game.js"></script>
+    </div>
+</body>
+
+</html>

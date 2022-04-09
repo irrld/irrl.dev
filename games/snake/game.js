@@ -21,6 +21,19 @@ var deathScoreText = document.getElementById("deathScore");
 var scoreText = document.getElementById("score");
 
 var infoDiv = document.getElementById("info");
+var dieSound = document.getElementById('dieSound');
+var eatSound = document.getElementById('eatSound');
+var startSound = document.getElementById('startSound');
+var speedupSound = document.getElementById('speedupSound');
+var muteButton = document.getElementById('mute');
+var unmuteButton = document.getElementById('unmute');
+
+var highestScore0 = document.getElementById('highestScore0');
+var highestScore1 = document.getElementById('highestScore1');
+if (window.sessionStorage.getItem('highest') == null){
+    window.sessionStorage.setItem('highest', '0');
+}
+
 
 var canvas = document.getElementById("game");
 canvas.width = GAME_SIZE;
@@ -33,6 +46,7 @@ const snake = [];
 
 var previousDirection;
 var direction;
+var soundEnabled = true;
 
 init();
 
@@ -40,6 +54,13 @@ var isPlaying = false;
 var isDead = false;
 var speed = START_SPEED;
 var lastMove = window.performance.now();
+var speedupAnimationTime = 0;
+
+if (window.sessionStorage.getItem('muted') == 'true'){
+    muteSound();
+} else {
+    unmuteSound();
+}
 
 function render() {
     if (isPlaying) {
@@ -74,21 +95,54 @@ function drawFrame() {
     }
     for (var i = 0; i < snake.length; i++) {
         var point = snake[i];
-        if (i == snake.length - 1) {
-            ctx.fillStyle = "#5c0009";
+        if (speedupAnimationTime == 0) {
+            if (i == snake.length - 1) {
+                ctx.fillStyle = "#5c0009";
+            } else {
+                ctx.fillStyle = "#940000";
+            }
         } else {
-            ctx.fillStyle = "#940000";
+            if (speedupAnimationTime % 8 < 3) {
+                if (i == snake.length - 1) {
+                    ctx.fillStyle = "#ffffff";
+                } else {
+                    ctx.fillStyle = "#ffffff";
+                }
+            } else {
+                if (i == snake.length - 1) {
+                    ctx.fillStyle = "#5c0009";
+                } else {
+                    ctx.fillStyle = "#940000";
+                }
+            }
         }
         ctx.fillRect(point.x * 16, point.y * 16, 16, 16);
     }
+    if (speedupAnimationTime > 0) {
+        speedupAnimationTime--;
+    }
 }
 function updateScore() {
-    deathScoreText.textContent = "You scored: " + (snake.length - 1);
-    scoreText.textContent = "Score: " + (snake.length - 1);
+    var score = Math.max(snake.length - 1, 0);
+    deathScoreText.textContent = "You scored: " + score;
+    scoreText.textContent = "Score: " + score;
+    var highest = window.sessionStorage.getItem('highest');
+    if (highest < score){
+        highest = score;
+        window.sessionStorage.setItem('highest', highest);
+    }
+    highestScore0.textContent = "Your highest: " + highest;
+    highestScore1.textContent = "Your highest: " + highest;
 }
 
 function adjustSpeed() {
-    speed = Math.min(START_SPEED + (snake.length - 1) / 4, 20);
+    var oldSpeed = speed;
+    speed = Math.floor(Math.min(START_SPEED + (snake.length - 1) / 4, 20));
+    if (oldSpeed != speed && isPlaying && !isDead) {
+        if (soundEnabled)
+            speedupSound.play();
+        speedupAnimationTime = 5 * 16;
+    }
 }
 
 function moveSnake(currentDirection) {
@@ -143,6 +197,8 @@ function moveSnake(currentDirection) {
                 foods.splice(i, 1);
                 adjustSpeed();
                 updateScore();
+                if (soundEnabled)
+                    eatSound.play();
                 break s;
             }
         }
@@ -155,6 +211,8 @@ function die() {
     infoDiv.style.height = "auto";
     deathScreen.style.display = "flex";
     scoreText.style.display = "none";
+    if (soundEnabled)
+        dieSound.play();
 }
 
 function startPlaying() {
@@ -162,11 +220,15 @@ function startPlaying() {
         isDead = false;
         infoDiv.style.opacity = 0;
         infoDiv.style.height = "0";
+        if (soundEnabled)
+            startSound.play();
         init();
     } else if (!isPlaying) {
         isPlaying = true;
         infoDiv.style.opacity = 0;
         infoDiv.style.height = "0";
+        if (soundEnabled)
+            startSound.play();
     } else {
         return;
     }
@@ -175,6 +237,18 @@ function startPlaying() {
     scoreText.style.display = "block";
 }
 
+function muteSound(){
+    soundEnabled = false;
+    muteButton.style.display = "none";
+    unmuteButton.style.display = "inline-block";
+    window.sessionStorage.setItem('muted', true);
+}
+function unmuteSound(){
+    soundEnabled = true;
+    muteButton.style.display = "inline-block";
+    unmuteButton.style.display = "none";
+    window.sessionStorage.setItem('muted', false);
+}
 function spawnFood(amount) {
     for (var i = 0; i < amount; i++) {
         var food;

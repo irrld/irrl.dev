@@ -24,6 +24,7 @@
             top: 0;
             flex-direction: column;
             justify-content: center;
+            cursor: pointer;
         }
 
         p,
@@ -86,7 +87,7 @@
         }
 
         .button svg {
-            filter: drop-shadow(0px 2px 10px rgb(0, 0, 0, 0.1));
+            filter: drop-shadow(0px 0px 10px rgb(0, 0, 0, 0.1));
         }
 
         #info p,
@@ -96,6 +97,7 @@
 
         #controls-aligner {
             display: flex;
+            position: relative;
             padding-top: 20px;
         }
 
@@ -140,11 +142,47 @@
             font-size: small;
             text-align: left;
         }
+
         #info {
             transition: all 0.2s ease;
             opacity: 1;
             display: block;
             height: auto;
+        }
+
+        .mute {
+            padding: 10px;
+            position: absolute;
+            left: 0px;
+            top: 20px;
+            transition: all 0.1s linear;
+            filter: drop-shadow(0px 2px 10px rgb(0, 0, 0, 0.1));
+            color: white;
+
+            background-color: #47ba66;
+            border-radius: 4px;
+            border-width: 1px;
+            border-color: #379150;
+            border-style: solid;
+        }
+
+        .mute svg {
+            filter: drop-shadow(0px 0px 10px rgb(0, 0, 0, 0.1));
+            width: 25px;
+        }
+
+        .mute:hover {
+            filter: drop-shadow(0px 2px 10px rgb(0, 0, 0, 0.4));
+        }
+
+        .mute:active {
+            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
+        }
+        #highestScore0, #highestScore1 {
+            margin-top: 0px;
+        }
+        #snakeTitle {
+            margin-bottom: 20px;
         }
     </style>
     <script src="https://kit.fontawesome.com/3f9ce49f95.js" crossorigin="anonymous"></script>
@@ -158,19 +196,30 @@
         <div id="deathScreen">
             <h1>You died!</h1>
             <p id="deathScore">You scored: 0</p>
+            <p id="highestScore0">Your highest: 0</p>
             <p>Press <strong>Enter</strong> (or click here) enter to start over!</p>
         </div>
         <div id="startScreen">
-            <h1>Snake</h1>
+            <h1 id="snakeTitle">Snake</h1>
+            <p id="highestScore1">Your highest: 0</p>
             <p>Press <strong>Enter</strong> (or click here) to start!</p>
         </div>
         <div id="controls-aligner">
+            <a class="mute" id="mute" href="#" onclick="muteSound()">
+                <i class="fa-solid fa-volume-high"></i>
+            </a>
+            <a class="mute" id="unmute" href="#" onclick="unmuteSound()">
+                <i class="fa-solid fa-volume-xmark"></i>
+            </a>
             <div id="controls">
-                <div class="button" id="button-left" onclick="moveLeft()"><i class="fa-solid fa-angle-left"></i></div>
-                <div class="button" id="button-up" onclick="moveUp()"><i class="fa-solid fa-angle-up"></i></div>
-                <div class="button" id="button-down" onclick="moveDown()"><i class="fa-solid fa-angle-down"></i></div>
-                <div class="button" id="button-right" onclick="moveRight()"><i class="fa-solid fa-angle-right"></i>
-                </div>
+                <a href="#" class="button" id="button-left" onclick="moveLeft()"><i
+                        class="fa-solid fa-angle-left"></i></a>
+                <a href="#" class="button" id="button-up" onclick="moveUp()"><i class="fa-solid fa-angle-up"></i></a>
+                <a href="#" class="button" id="button-down" onclick="moveDown()"><i
+                        class="fa-solid fa-angle-down"></i></a>
+                <a href="#" class="button" id="button-right" onclick="moveRight()"><i
+                        class="fa-solid fa-angle-right"></i>
+                </a>
             </div>
         </div>
         <div id="info">
@@ -186,6 +235,11 @@
             </p>
         </div>
         <p id="author">Made by irrl, <a href="https://github.com/irrld/snake.js">click here</a> for the sources.</p>
+        <audio id="dieSound" src="audio/die.wav"></audio>
+        <audio id="eatSound" src="audio/eat.wav"></audio>
+        <audio id="startSound" src="audio/start.wav"></audio>
+        <audio id="speedupSound" src="audio/speedup.wav"></audio>
+
         <script src="game.js"></script>
     </div>
 </body>

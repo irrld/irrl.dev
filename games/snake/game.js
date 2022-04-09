@@ -274,6 +274,7 @@ function init() {
     snake.push({ x: Math.floor(GAME_SIZE / 16 / 2 - 1), y: Math.floor(GAME_SIZE / 16 / 2 - 1) });
     updateScore();
     adjustSpeed();
+    speedupAnimationTime = 0;
 }
 
 function foodFind(arrayFood, food) {

@@ -28,9 +28,11 @@ var speedupSound = document.getElementById('speedupSound');
 var muteButton = document.getElementById('mute');
 var unmuteButton = document.getElementById('unmute');
 
+var twitterShare = document.getElementById('twitterShare');
+
 var highestScore0 = document.getElementById('highestScore0');
 var highestScore1 = document.getElementById('highestScore1');
-if (window.sessionStorage.getItem('highest') == null){
+if (window.sessionStorage.getItem('highest') == null) {
     window.sessionStorage.setItem('highest', '0');
 }
 
@@ -56,7 +58,7 @@ var speed = START_SPEED;
 var lastMove = window.performance.now();
 var speedupAnimationTime = 0;
 
-if (window.sessionStorage.getItem('muted') == 'true'){
+if (window.sessionStorage.getItem('muted') == 'true') {
     muteSound();
 } else {
     unmuteSound();
@@ -127,12 +129,13 @@ function updateScore() {
     deathScoreText.textContent = "You scored: " + score;
     scoreText.textContent = "Score: " + score;
     var highest = window.sessionStorage.getItem('highest');
-    if (highest < score){
+    if (highest < score) {
         highest = score;
         window.sessionStorage.setItem('highest', highest);
     }
     highestScore0.textContent = "Your highest: " + highest;
     highestScore1.textContent = "Your highest: " + highest;
+    twitterShare.href = "https://twitter.com/intent/tweet?hashtags=snakegame%2C&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Ehashtag%7Ctwgr%5Esnakegame&text=I%20scored%20" + highest + "%20on%20irrl\'s%20snake%2C%20can%20you%20beat%20me%3F%20https%3A%2F%2Firrl.dev%2Fgames%2Fsnake%2F";
 }
 
 function adjustSpeed() {
@@ -237,13 +240,13 @@ function startPlaying() {
     scoreText.style.display = "block";
 }
 
-function muteSound(){
+function muteSound() {
     soundEnabled = false;
     muteButton.style.display = "none";
     unmuteButton.style.display = "inline-block";
     window.sessionStorage.setItem('muted', true);
 }
-function unmuteSound(){
+function unmuteSound() {
     soundEnabled = true;
     muteButton.style.display = "inline-block";
     unmuteButton.style.display = "none";
@@ -254,7 +257,7 @@ function spawnFood(amount) {
         var food;
         do {
             food = { x: Math.floor(Math.random() * (GAME_SIZE / 16)), y: Math.floor(Math.random() * (GAME_SIZE / 16)) };
-        } while (foods.findIndex(foodFind, food) != -1);
+        } while (foods.findIndex(foodFind, food) != -1 || snake.findIndex(pointFind, food) != -1);
 
         foods.push(food);
     }
@@ -280,6 +283,11 @@ function init() {
 function foodFind(arrayFood, food) {
     return arrayFood.x == food.x && arrayFood.y == food.y;
 }
+
+function pointFind(arrayPoint, food) {
+    return arrayPoint.x == food.x && arrayPoint.y == food.y;
+}
+
 
 document.addEventListener('keydown', function (event) {
     if (event.key == 'ArrowUp') {

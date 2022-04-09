@@ -178,11 +178,43 @@
         .mute:active {
             box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
         }
-        #highestScore0, #highestScore1 {
+
+        #highestScore0,
+        #highestScore1 {
             margin-top: 0px;
         }
+
         #snakeTitle {
             margin-bottom: 20px;
+        }
+        
+        .share {
+            padding: 10px;
+            position: absolute;
+            right: 0;
+            top: 20px;
+            transition: all 0.1s linear;
+            filter: drop-shadow(0px 2px 10px rgb(0, 0, 0, 0.1));
+            color: white;
+
+            background-color: #00ACEE;
+            border-radius: 4px;
+            border-width: 1px;
+            border-color: #007cad;
+            border-style: solid;
+        }
+
+        .share svg {
+            filter: drop-shadow(0px 0px 10px rgb(0, 0, 0, 0.1));
+            width: 25px;
+        }
+
+        .share:hover {
+            filter: drop-shadow(0px 2px 10px rgb(0, 0, 0, 0.4));
+        }
+
+        .share:active {
+            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
         }
     </style>
     <script src="https://kit.fontawesome.com/3f9ce49f95.js" crossorigin="anonymous"></script>
@@ -221,6 +253,9 @@
                         class="fa-solid fa-angle-right"></i>
                 </a>
             </div>
+            <a id="twitterShare" target="_blank" class="share">
+                <i class="fa-brands fa-twitter"></i>
+            </a>
         </div>
         <div id="info">
             <h1>Controls</h1>

@@ -1,0 +1,67 @@
+:root {
+    --color-link-text: #c00000;
+    --color-link-secondary-text: #381bbd;
+    --color-primary-text: #2c2c2c;
+    font-weight: 500;
+}
+
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+body {
+    background-image: url("../images/bg-wool-dark.png");
+    background-repeat: repeat;
+}
+
+p,
+h1,
+h2 {
+    text-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
+    color: var(--color-primary-text);
+}
+
+.page {
+    display: inline-flex;
+    margin: auto;
+    margin-top: 0;
+    min-height: 100%;
+    padding: 20px 100px;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-image: url("../images/bg-wool-light.png");
+    background-repeat: repeat;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-link-text);
+    font-weight: 600;
+    transition: text-shadow 0.2s ease-in;
+}
+
+a:hover {
+    text-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+.accounts a {
+    margin-right: 20px;
+    color: var(--color-link-secondary-text);
+}
+
+.accounts a:hover {
+    text-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+.footer {
+    margin-top: auto;
+}

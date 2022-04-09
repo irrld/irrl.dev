@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <title>irrl.dev - Snake</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="./favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
+            overscroll-behavior: none;
         }
 
         #deathScreen,
@@ -130,10 +134,17 @@
         .button:active {
             box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.4);
         }
+
         #author {
             padding-top: 20px;
             font-size: small;
             text-align: left;
+        }
+        #info {
+            transition: all 0.2s ease;
+            opacity: 1;
+            display: block;
+            height: auto;
         }
     </style>
     <script src="https://kit.fontawesome.com/3f9ce49f95.js" crossorigin="anonymous"></script>

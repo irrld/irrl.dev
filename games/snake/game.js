@@ -2,9 +2,8 @@ const DIRECTION_UP = 0;
 const DIRECTION_RIGHT = 1;
 const DIRECTION_DOWN = 2;
 const DIRECTION_LEFT = 3;
-const TARGET_FPS = 5; // game speed
+const START_SPEED = 5;
 const GAME_SIZE = 400;
-const OPTIMAL_FRAME_TIME = 1000 / TARGET_FPS;
 
 var mainPage = document.getElementById("mainPage");
 mainPage.style.height = GAME_SIZE + "px";
@@ -21,6 +20,7 @@ startScreen.style.width = GAME_SIZE + "px";
 var deathScoreText = document.getElementById("deathScore");
 var scoreText = document.getElementById("score");
 
+var infoDiv = document.getElementById("info");
 
 var canvas = document.getElementById("game");
 canvas.width = GAME_SIZE;
@@ -28,44 +28,44 @@ canvas.height = GAME_SIZE;
 
 var ctx = canvas.getContext("2d");
 
-var id = setInterval(tick, OPTIMAL_FRAME_TIME);
-
-
 const foods = [];
 const snake = [];
 
-var lastDirection;
+var previousDirection;
 var direction;
 
 init();
 
-var lastFrame = 0;
-var lastFpsTime = 0;
 var isPlaying = false;
 var isDead = false;
+var speed = START_SPEED;
+var lastMove = window.performance.now();
 
-function tick() {
-    if (lastFrame == 0) {
-        now = window.performance.now();
-    }
-    var now = window.performance.now();
-    var updateTime = now - lastFrame;
-    lastFrame = now;
-    var deltaTime = updateTime / OPTIMAL_FRAME_TIME;
-    lastFpsTime += updateTime;
-
-    if (lastFpsTime >= 1000) {
-        lastFpsTime = 0;
+function render() {
+    if (isPlaying) {
+        move();
+        if (foods.length == 0) {
+            spawnFood(1);
+        }
     }
 
+    drawFrame();
+    requestAnimationFrame(render);
+}
+render();
+function move() {
+    if (!isDead) {
+        var now = window.performance.now();
+        if (lastMove + (1000 / speed) <= now) {
+            lastMove = now;
+            previousDirection = direction;
+            moveSnake(previousDirection);
+        }
+    }
+}
+function drawFrame() {
     ctx.fillStyle = "#d6d6d6";
     ctx.fillRect(0, 0, GAME_SIZE, GAME_SIZE);
-
-    if (!isPlaying) {
-        return;
-    }
-    deathScoreText.textContent = "You scored: " + (snake.length - 1);
-    scoreText.textContent = "Score: " + (snake.length - 1);
 
     for (var i = 0; i < foods.length; i++) {
         var food = foods[i];
@@ -81,22 +81,17 @@ function tick() {
         }
         ctx.fillRect(point.x * 16, point.y * 16, 16, 16);
     }
-
-    if (!isDead){
-        lastDirection = direction;
-        moveSnake(lastDirection);
-    }
-    if (foods.length == 0) {
-        spawnFood(1);
-    }
+}
+function updateScore() {
+    deathScoreText.textContent = "You scored: " + (snake.length - 1);
+    scoreText.textContent = "Score: " + (snake.length - 1);
 }
 
 function adjustSpeed() {
-    clearInterval(id);
-    id = setInterval(tick, 1000 / Math.min(TARGET_FPS + (snake.length - 1) / 4, 20));
+    speed = Math.min(START_SPEED + (snake.length - 1) / 4, 20);
 }
 
-function moveSnake(direction) {
+function moveSnake(currentDirection) {
     var firstPoint;
     for (var i = 0; i < snake.length; i++) {
         var point = snake[i];
@@ -108,7 +103,7 @@ function moveSnake(direction) {
             point.x = next.x;
             point.y = next.y;
         } else {
-            switch (direction) {
+            switch (currentDirection) {
                 case DIRECTION_UP:
                     point.y -= 1;
                     break;
@@ -147,6 +142,7 @@ function moveSnake(direction) {
                 snake.unshift(firstPoint);
                 foods.splice(i, 1);
                 adjustSpeed();
+                updateScore();
                 break s;
             }
         }
@@ -155,16 +151,22 @@ function moveSnake(direction) {
 
 function die() {
     isDead = true;
+    infoDiv.style.opacity = 1;
+    infoDiv.style.height = "auto";
     deathScreen.style.display = "flex";
     scoreText.style.display = "none";
 }
 
 function startPlaying() {
-    if (isDead){
+    if (isDead) {
         isDead = false;
+        infoDiv.style.opacity = 0;
+        infoDiv.style.height = "0";
         init();
-    } else if (!isPlaying){
+    } else if (!isPlaying) {
         isPlaying = true;
+        infoDiv.style.opacity = 0;
+        infoDiv.style.height = "0";
     } else {
         return;
     }
@@ -196,7 +198,7 @@ function init() {
         snake.pop();
     }
     snake.push({ x: Math.floor(GAME_SIZE / 16 / 2 - 1), y: Math.floor(GAME_SIZE / 16 / 2 - 1) });
-    scoreText.textContent = "Score: 0";
+    updateScore();
     adjustSpeed();
 }
 
@@ -205,7 +207,6 @@ function foodFind(arrayFood, food) {
 }
 
 document.addEventListener('keydown', function (event) {
-    var checkDirection = snake.length > 1;
     if (event.key == 'ArrowUp') {
         if (moveUp()) {
             event.preventDefault();
@@ -236,7 +237,7 @@ function moveUp() {
     }
 
     var checkDirection = snake.length > 1;
-    if (!checkDirection || lastDirection != DIRECTION_DOWN) {
+    if (!checkDirection || previousDirection != DIRECTION_DOWN) {
         direction = DIRECTION_UP;
     }
     return true;
@@ -247,7 +248,7 @@ function moveDown() {
     }
 
     var checkDirection = snake.length > 1;
-    if (!checkDirection || lastDirection != DIRECTION_UP) {
+    if (!checkDirection || previousDirection != DIRECTION_UP) {
         direction = DIRECTION_DOWN;
     }
     return true;
@@ -258,7 +259,7 @@ function moveLeft() {
     }
 
     var checkDirection = snake.length > 1;
-    if (!checkDirection || lastDirection != DIRECTION_RIGHT) {
+    if (!checkDirection || previousDirection != DIRECTION_RIGHT) {
         direction = DIRECTION_LEFT;
     }
     return true;
@@ -269,7 +270,7 @@ function moveRight() {
     }
 
     var checkDirection = snake.length > 1;
-    if (!checkDirection || lastDirection != DIRECTION_LEFT) {
+    if (!checkDirection || previousDirection != DIRECTION_LEFT) {
         direction = DIRECTION_RIGHT;
     }
     return true;

@@ -25,6 +25,11 @@
             flex-direction: column;
             justify-content: center;
             cursor: pointer;
+
+            border-width: 2px;
+            border-color: gray;
+            border-radius: 4px;
+            border-style: solid;
         }
 
         p,
@@ -53,16 +58,18 @@
             display: inline-block;
             position: relative;
             margin: 20px;
-            border-width: 2px;
-            border-color: gray;
-            border-style: solid;
-            box-sizing: content-box;
-            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
         }
 
         #game {
             border-radius: 2px;
+        }
+        #gameBox {
+            border-width: 2px;
+            border-color: gray;
+            border-radius: 4px;
+            border-style: solid;
+            box-sizing: content-box;
+            box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.1);
         }
 
         .button {
@@ -223,18 +230,20 @@
 <body>
     <div id="mainPage">
         <p id="score">Score: 0</p>
-        <canvas id="game">
-        </canvas>
-        <div id="deathScreen">
-            <h1>You died!</h1>
-            <p id="deathScore">You scored: 0</p>
-            <p id="highestScore0">Your highest: 0</p>
-            <p>Press <strong>Enter</strong> (or click here) enter to start over!</p>
-        </div>
-        <div id="startScreen">
-            <h1 id="snakeTitle">Snake</h1>
-            <p id="highestScore1">Your highest: 0</p>
-            <p>Press <strong>Enter</strong> (or click here) to start!</p>
+        <div id="gameBox">
+            <canvas id="game">
+            </canvas>
+            <div id="deathScreen">
+                <h1>You died!</h1>
+                <p id="deathScore">You scored: 0</p>
+                <p id="highestScore0">Your highest: 0</p>
+                <p>Press <strong>Enter</strong> (or click here) enter to start over!</p>
+            </div>
+            <div id="startScreen">
+                <h1 id="snakeTitle">Snake</h1>
+                <p id="highestScore1">Your highest: 0</p>
+                <p>Press <strong>Enter</strong> (or click here) to start!</p>
+            </div>
         </div>
         <div id="controls-aligner">
             <a class="mute" id="mute" href="#" onclick="muteSound()">

@@ -5,9 +5,9 @@ const DIRECTION_LEFT = 3;
 const START_SPEED = 5;
 const GAME_SIZE = 400;
 
-var mainPage = document.getElementById("mainPage");
-mainPage.style.height = GAME_SIZE + "px";
-mainPage.style.width = GAME_SIZE + "px";
+var gameBox = document.getElementById("gameBox");
+gameBox.style.height = GAME_SIZE + "px";
+gameBox.style.width = GAME_SIZE + "px";
 
 var deathScreen = document.getElementById("deathScreen");
 deathScreen.style.display = "none";
@@ -27,6 +27,9 @@ var startSound = document.getElementById('startSound');
 var speedupSound = document.getElementById('speedupSound');
 var muteButton = document.getElementById('mute');
 var unmuteButton = document.getElementById('unmute');
+
+var body = document.body;
+body.style.height = window.innerHeight - 1 + "px";
 
 var twitterShare = document.getElementById('twitterShare');
 
@@ -216,6 +219,7 @@ function die() {
     scoreText.style.display = "none";
     if (soundEnabled)
         dieSound.play();
+    body.style.overflowY = "";
 }
 
 function startPlaying() {
@@ -225,6 +229,7 @@ function startPlaying() {
         infoDiv.style.height = "0";
         if (soundEnabled)
             startSound.play();
+        body.style.overflowY = "hidden";
         init();
     } else if (!isPlaying) {
         isPlaying = true;
@@ -232,6 +237,7 @@ function startPlaying() {
         infoDiv.style.height = "0";
         if (soundEnabled)
             startSound.play();
+        body.style.overflowY = "hidden";
     } else {
         return;
     }
@@ -395,18 +401,14 @@ function handleTouchMove(evt) {
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) {
         if (xDiff > 0) {
-            evt.preventDefault();
             moveLeft();
         } else {
-            evt.preventDefault();
             moveRight();
         }
     } else {
         if (yDiff > 0) {
-            evt.preventDefault();
             moveUp();
         } else {
-            evt.preventDefault();
             moveDown();
         }
     }

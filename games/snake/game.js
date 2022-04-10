@@ -32,8 +32,8 @@ var twitterShare = document.getElementById('twitterShare');
 
 var highestScore0 = document.getElementById('highestScore0');
 var highestScore1 = document.getElementById('highestScore1');
-if (window.sessionStorage.getItem('highest') == null) {
-    window.sessionStorage.setItem('highest', '0');
+if (window.localStorage.getItem('highest') == null) {
+    window.localStorage.setItem('highest', '0');
 }
 
 
@@ -58,7 +58,7 @@ var speed = START_SPEED;
 var lastMove = window.performance.now();
 var speedupAnimationTime = 0;
 
-if (window.sessionStorage.getItem('muted') == 'true') {
+if (window.localStorage.getItem('muted') == 'true') {
     muteSound();
 } else {
     unmuteSound();
@@ -128,10 +128,10 @@ function updateScore() {
     var score = Math.max(snake.length - 1, 0);
     deathScoreText.textContent = "You scored: " + score;
     scoreText.textContent = "Score: " + score;
-    var highest = window.sessionStorage.getItem('highest');
+    var highest = window.localStorage.getItem('highest');
     if (highest < score) {
         highest = score;
-        window.sessionStorage.setItem('highest', highest);
+        window.localStorage.setItem('highest', highest);
     }
     highestScore0.textContent = "Your highest: " + highest;
     highestScore1.textContent = "Your highest: " + highest;
@@ -244,13 +244,13 @@ function muteSound() {
     soundEnabled = false;
     muteButton.style.display = "none";
     unmuteButton.style.display = "inline-block";
-    window.sessionStorage.setItem('muted', true);
+    window.localStorage.setItem('muted', true);
 }
 function unmuteSound() {
     soundEnabled = true;
     muteButton.style.display = "inline-block";
     unmuteButton.style.display = "none";
-    window.sessionStorage.setItem('muted', false);
+    window.localStorage.setItem('muted', false);
 }
 function spawnFood(amount) {
     for (var i = 0; i < amount; i++) {
